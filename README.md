@@ -10,6 +10,10 @@ Material Point Method(MPM)を用いて計算している。
 cargo run --release
 ```
 
+## 操作方法
+
+* 左クリック長押し: 流体を動かす。
+
 ## 使用ライブラリ
 
 * **[Bevy](https://github.com/bevyengine/bevy)**: ECSによる計算、描画用。
@@ -23,6 +27,7 @@ cargo run --release
 
 ## TODO
 
+* ステップ実行の実装。
 * 並列化する。
 * WebAssembly化し、ブラウザで閲覧可能にする。
-* 計算精度の向上(圧力計算)
+* 計算精度の向上(圧力計算)。
