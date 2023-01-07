@@ -13,6 +13,9 @@ pub struct Mass(pub f32);
 pub struct C(pub Mat2);
 
 #[derive(Component, Default)]
+pub struct ColorFactor(pub usize);
+
+#[derive(Component, Default)]
 pub struct Particle {}
 
 #[derive(Component)]
@@ -97,6 +100,8 @@ pub struct Node {
     pub force: Vec2,
     pub mass: f32,
 
+    pub p_count: usize,
+
     pub index_x: usize,
     pub index_y: usize,
 }
@@ -108,6 +113,7 @@ impl Node {
             v_star: Vec2::ZERO,
             force: Vec2::ZERO,
             mass: 0.0,
+            p_count: 0,
             index_x,
             index_y,
         }
@@ -118,6 +124,7 @@ impl Node {
         self.v_star = Vec2::ZERO;
         self.force = Vec2::ZERO;
         self.mass = 0.0;
+        self.p_count = 0;
     }
 }
 

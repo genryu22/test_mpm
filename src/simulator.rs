@@ -27,6 +27,7 @@ pub fn setup(mut commands: Commands, settings: Res<Settings>) {
                 Velocity::default(),
                 Position(p),
                 C::default(),
+                ColorFactor::default(),
             ));
         }
     }
@@ -91,6 +92,10 @@ fn distribute_mass(
                 if let Some(node) = node {
                     node.mass += mass_contrib;
                     node.v += mass_contrib * (v.0 + q);
+
+                    if (gx, gy) == (1, 1) {
+                        node.p_count += 1;
+                    }
                 }
             }
         }
@@ -186,13 +191,23 @@ fn update_grid(settings: Res<Settings>, mut grid_query: Query<&mut Grid>) {
 
 fn g2p(
     settings: Res<Settings>,
-    mut particle_query: Query<(&mut Position, &Mass, &mut Velocity, &mut C), With<Particle>>,
+    mut particle_query: Query<
+        (
+            &mut Position,
+            &Mass,
+            &mut Velocity,
+            &mut C,
+            &mut ColorFactor,
+        ),
+        With<Particle>,
+    >,
     grid_query: Query<&Grid>,
 ) {
     let grid = grid_query.single();
 
-    particle_query.par_for_each_mut(10, |(mut p, m, mut v, mut c)| {
+    particle_query.par_for_each_mut(10, |(mut p, m, mut v, mut c, mut cf)| {
         v.0 = Vec2::ZERO;
+        cf.0 = 0;
 
         let base = (p.0 * settings.cell_width() - 0.5).floor();
         let fx = p.0 * settings.cell_width() - base;
@@ -214,6 +229,8 @@ fn g2p(
                     let weighted_velocity = node.v * weight;
                     b += Mat2::from_cols(weighted_velocity * dpos.x, weighted_velocity * dpos.y);
                     v.0 += weighted_velocity;
+
+                    cf.0 += node.p_count;
                 }
             }
         }
