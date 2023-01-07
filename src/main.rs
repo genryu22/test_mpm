@@ -4,6 +4,5 @@ use viewer::*;
 fn main() {
     println!("Hello, world!");
 
-    let viewer = Viewer::new();
-    viewer.open();
+    viewer::start_bevy_systems();
 }
