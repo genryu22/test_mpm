@@ -140,6 +140,7 @@ fn p2g(
             let mut strain = c.0;
 
             let anti_trace = strain.col(1).x + strain.col(0).y;
+            strain *= 2.;
             strain.col_mut(1).x = anti_trace;
             strain.col_mut(0).y = anti_trace;
 
