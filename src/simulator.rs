@@ -49,12 +49,12 @@ pub fn setup(mut commands: Commands, settings: Res<Settings>) {
 
 pub fn create_system_set() -> SystemSet {
     SystemSet::new()
-        .with_system(clear_grid.label("clear_grid"))
+        .with_system(clear_grid.label("clear_grid").before("input"))
         .with_system(distribute_mass.label("distribute_mass").after("clear_grid"))
         .with_system(p2g.label("p2g").after("distribute_mass"))
         .with_system(update_grid.label("update_grid").after("p2g"))
         .with_system(g2p.label("g2p").after("update_grid"))
-        .with_system(mouse_button_input.after("g2p"))
+        .with_system(mouse_button_input.label("input").after("g2p"))
 }
 
 fn clear_grid(mut grid_query: Query<&mut Grid>) {
