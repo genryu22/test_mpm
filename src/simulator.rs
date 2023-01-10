@@ -71,8 +71,8 @@ fn distribute_mass(
 ) {
     let mut grid = grid_query.single_mut();
     for (p, m, v, c) in particle_query.iter() {
-        let base = (p.0 * settings.cell_width() - 0.5).floor();
-        let fx = p.0 * settings.cell_width() - base;
+        let base = (p.0 / settings.cell_width() - 0.5).floor();
+        let fx = p.0 / settings.cell_width() - base;
 
         let w = vec![
             0.5 * (1.5 - fx).powf(2.),
@@ -109,8 +109,8 @@ fn p2g(
 ) {
     let mut grid = grid_query.single_mut();
     for (p, m, v, c) in particle_query.iter() {
-        let base = (p.0 * settings.cell_width() - 0.5).floor();
-        let fx = p.0 * settings.cell_width() - base;
+        let base = (p.0 / settings.cell_width() - 0.5).floor();
+        let fx = p.0 / settings.cell_width() - base;
 
         let w = vec![
             0.5 * (1.5 - fx).powf(2.),
@@ -151,7 +151,7 @@ fn p2g(
 
             stress += settings.dynamic_viscosity * strain;
 
-            -volume * 4. * stress * settings.dt
+            -volume * 4. / (settings.cell_width() * settings.cell_width()) * stress * settings.dt
         };
 
         for gx in 0..3 {
@@ -209,8 +209,8 @@ fn g2p(
         v.0 = Vec2::ZERO;
         cf.0 = 0;
 
-        let base = (p.0 * settings.cell_width() - 0.5).floor();
-        let fx = p.0 * settings.cell_width() - base;
+        let base = (p.0 / settings.cell_width() - 0.5).floor();
+        let fx = p.0 / settings.cell_width() - base;
 
         let w = vec![
             0.5 * (1.5 - fx).powf(2.),
@@ -235,7 +235,7 @@ fn g2p(
             }
         }
 
-        c.0 = b * (4. / (settings.cell_width() * settings.cell_width()));
+        c.0 = b * (4. / (settings.cell_width() * settings.cell_width())); // ind_dx 一つ？
 
         p.0 += v.0 * settings.dt;
 
